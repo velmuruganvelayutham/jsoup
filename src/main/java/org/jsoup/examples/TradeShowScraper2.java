@@ -2,6 +2,7 @@ package org.jsoup.examples;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,9 +12,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class TradeShowScraper2 {
+
+	static int l = 1;
 
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
@@ -32,8 +36,33 @@ public class TradeShowScraper2 {
 		webClient.getOptions().setUseInsecureSSL(true);
 		final HtmlPage page = webClient
 				.getPage("http://s23.a2zinc.net/clients/TIA/ToyFair2015/Public/EventMap.aspx");
-		Thread.sleep(30000);
-		for (int i = 1; i < 200; i++) {
+		Thread.sleep(60000);
+		generateCSV(writer, page);
+
+		for (int k = 1; k < 4; k++) {
+			List<?> nextButtonList = page
+					.getByXPath("//*[@id=\"ctl00_ctl00_cph1_cph1_ucExhibitorList_dockExhibitorList_C_radExhibitorList_ctl00_Pager\"]/tbody/tr/td/table/tbody/tr/td/div[3]/input[1]");
+			Iterator<?> iterator = nextButtonList.iterator();
+			while (iterator.hasNext()) {
+				HtmlElement next = (HtmlElement) iterator.next();
+				System.out.println(next);
+				next.click();
+				Thread.sleep(60000);
+				generateCSV(writer, page);
+			}
+		}
+
+		writer.flush();
+		writer.close();
+		// webClient.closeAllWindows();
+
+	}
+
+	private static void generateCSV(FileWriter writer, final HtmlPage page)
+			throws IOException {
+
+		for (int i = 0; i < 200; i++) {
+			l++;
 			List<?> byXPath = page
 					.getByXPath("//*[@id=\"ctl00_ctl00_cph1_cph1_ucExhibitorList_dockExhibitorList_C_radExhibitorList_ctl00__"
 							+ i + "\"]/td[2]/div");
@@ -163,11 +192,10 @@ public class TradeShowScraper2 {
 				}
 			}
 			writer.append('\n');
+			System.out.print(l);
+			if (l > 732) {
+				break;
+			}
 		}
-
-		writer.flush();
-		writer.close();
-		// webClient.closeAllWindows();
-
 	}
 }
