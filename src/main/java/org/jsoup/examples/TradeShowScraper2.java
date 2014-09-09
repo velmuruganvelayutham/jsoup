@@ -32,12 +32,38 @@ public class TradeShowScraper2 {
 		}
 		writer.append('\n');
 
+		// Show Date
+		String showDateDetails = " ";
+		String showUrl = "http://www.toyfairny.com/ToyFair/ShowInfo/About_the_Show/Toy_Fair/Show_Info/About_the_Show.aspx";
+		Document showDateDoc = Jsoup.connect(showUrl).get();
+
+		Elements showDateDetail = showDateDoc
+				.getElementsByClass("iMIS-WebPart");
+
+		for (Element showDate : showDateDetail) {
+			Elements tagName = showDate.getElementsByTag("table");
+			for (Element tableData : tagName) {
+				String showDates = StringUtils.replace(tableData
+						.getElementsByTag("td").html(), " – ", "-");
+				showDates = StringUtils.replace(showDates, ",", "-");
+				showDates = StringUtils.replace(showDates, "&nbsp;", " ");
+				String[] split = showDates.split("\n");
+				showDateDetails = "\"" + split[0] + " " + split[1] + "\n"
+						+ split[2] + " " + split[3] + "\n" + split[4] + " "
+						+ split[5] + "\"";
+				System.out.print(showDateDetails);
+				break;
+			}
+			break;
+		}
+
 		final WebClient webClient = new WebClient();
 		webClient.getOptions().setUseInsecureSSL(true);
 		final HtmlPage page = webClient
 				.getPage("http://s23.a2zinc.net/clients/TIA/ToyFair2015/Public/EventMap.aspx");
+
 		Thread.sleep(60000);
-		generateCSV(writer, page);
+		generateCSV(writer, page, showDateDetails);
 
 		for (int k = 1; k < 4; k++) {
 			List<?> nextButtonList = page
@@ -48,18 +74,16 @@ public class TradeShowScraper2 {
 				System.out.println(next);
 				next.click();
 				Thread.sleep(60000);
-				generateCSV(writer, page);
+				generateCSV(writer, page, showDateDetails);
 			}
 		}
 
 		writer.flush();
 		writer.close();
-		// webClient.closeAllWindows();
-
 	}
 
-	private static void generateCSV(FileWriter writer, final HtmlPage page)
-			throws IOException {
+	private static void generateCSV(FileWriter writer, final HtmlPage page,
+			String showDates) throws IOException {
 
 		for (int i = 0; i < 200; i++) {
 			l++;
@@ -82,11 +106,11 @@ public class TradeShowScraper2 {
 				for (Element vendors : vendorName) {
 
 					// Show
-					writer.append(" ");
+					writer.append("Toy Fair NY15");
 					writer.append(",");
 
 					// Show date
-					writer.append(" ");
+					writer.append(showDates);
 					writer.append(",");
 
 					// Vendor Name
