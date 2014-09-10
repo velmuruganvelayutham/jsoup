@@ -21,8 +21,9 @@ public class ABCKids14 {
 
 	public static void main(String[] args)
 			throws FailingHttpStatusCodeException, MalformedURLException,
-			IOException, InterruptedException {
+			IOException {
 
+		long startTime = System.currentTimeMillis();
 		FileWriter writer = new FileWriter(
 				"/home/velmuruganv/Downloads/abckids.csv");
 		String[] headers = { "Show", "Show Dates", "Vendor name", "Booth No",
@@ -40,55 +41,51 @@ public class ABCKids14 {
 		options.setUseInsecureSSL(true);
 		HtmlPage page = null;
 		HashSet<HtmlAnchor> links = new HashSet<HtmlAnchor>();
-		for (int i = 1; i <= 1; i++) {
+		for (int i = 1; i <= 11; i++) {
 			page = webClient
 					.getPage("http://abckids14.mapyourshow.com/5_0/exhibitor_results.cfm?alpha=@&type=alpha&page="
 							+ i + "#GotoResults");
-			Thread.sleep(2000);
-			for (int j = 3, k = 2; j < 56; j++) {
+			boolean loaded = false;
+			while (!loaded) {
+				List<?> firstRecord = page
+						.getByXPath("//*[@id=\"mys-main-content\"]/table[2]/tbody/tr[2]/td[2]/a");
+				List<?> lastRecord = page
+						.getByXPath("//*[@id=\"mys-main-content\"]/table[2]/tbody/tr[101]/td[2]/a");
+				if ((firstRecord.size() > 0 && lastRecord.size() > 0)
+						|| (firstRecord.size() > 0)) {
+					loaded = true;
+					System.out.println("Page is loaded !");
+				}
+			}
+			for (int j = 2; j < 102; j++) {
 				List<?> byXPath = null;
-				if (j < 46) {
-					// byXPath = page
-					// .getByXPath("//*[@id=\"mys-main-content\"]/table[1]/tbody/tr["
-					// + j + "]/td[2]/a");
-					// if (byXPath.size() == 0) {
-					// byXPath = page
-					// .getByXPath("//*[@id=\"mys-main-content\"]/table[1]/tbody/tr["
-					// + j + "]/td[2]/strong/a");
-					// }
-
-				} else {
+				byXPath = page
+						.getByXPath("//*[@id=\"mys-main-content\"]/table[2]/tbody/tr["
+								+ j + "]/td[2]/a");
+				if (byXPath.size() == 0) {
 					byXPath = page
 							.getByXPath("//*[@id=\"mys-main-content\"]/table[2]/tbody/tr["
-									+ k + "]/td[2]/a");
-					if (byXPath.size() == 0) {
-						byXPath = page
-								.getByXPath("//*[@id=\"mys-main-content\"]/table[2]/tbody/tr["
-										+ k + "]/td[2]/strong/a");
-					}
-					k++;
+									+ j + "]/td[2]/strong/a");
 				}
 				if (byXPath != null && byXPath.size() > 0) {
 					HtmlAnchor x = (HtmlAnchor) byXPath.get(0);
 					links.add(x);
-					System.out.println(i + " Page Link is found : " + j + " "
+					System.out.println(i
+							+ " Page Link is added to the hashset : " + j + " "
 							+ x);
 				}
-
 			}
-
 			System.out.println("Total number of links " + links.size());
 		}
-
 		// Iterate through hashset
 
 		for (HtmlAnchor link : links) {
-			// Show
-			writer.append(" ");
-			writer.append(",");
 
+			// Show
+			writer.append(" ABC Kids Expo ");
+			writer.append(",");
 			// Show date
-			writer.append(" ");
+			writer.append("September 7-10-2014- Las Vegas Convention Center ");
 			writer.append(",");
 			HtmlPage click = link.click();
 			StringBuffer sb = new StringBuffer();
@@ -96,14 +93,12 @@ public class ABCKids14 {
 					.getByXPath("//*[@id=\"mys-exhibitorInfo\"]/h2");
 			if (vendorList.size() > 0) {
 				HtmlHeading2 htmlHeading = (HtmlHeading2) vendorList.get(0);
-
 				String vendor = StringUtils.replace(htmlHeading.asText(), ",",
 						"-");
-				System.out.println("html heading 2 " + vendor);
+				System.out.println("Vendor :-> " + vendor);
 				// Vendor Name
 				writer.append(vendor);
 				writer.append(",");
-
 			}
 			List<?> floorName = click
 					.getByXPath("//*[@id=\"mys-exhibitorInfo\"]/h4");
@@ -111,7 +106,7 @@ public class ABCKids14 {
 				HtmlHeading4 htmlHeading = (HtmlHeading4) floorName.get(0);
 				String boothNo = StringUtils.replace(htmlHeading.asText(), ",",
 						"-");
-				System.out.println("html heading 4 " + boothNo);
+				System.out.println("Booth No :-> " + boothNo);
 				// Booth No
 				writer.append(boothNo);
 				writer.append(",");
@@ -125,16 +120,18 @@ public class ABCKids14 {
 					String address = StringUtils.replace(listItem.asText(),
 							",", "-");
 					sb.append(address);
-
 				}
-
 			}
 			// Address
 			writer.append(sb.toString());
 			writer.append("\n");
-			System.out.println(" address " + sb);
+			System.out.println(" Address :-> " + sb);
 		}
 		writer.flush();
 		writer.close();
+
+		long endTime = System.currentTimeMillis();
+		System.out.println("Total time taken to prepare csv "
+				+ (endTime - startTime) / 1000 + " Seconds ");
 	}
 }
