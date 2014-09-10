@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class TradeShowScraper3 {
+public class ASDOnline {
 
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
