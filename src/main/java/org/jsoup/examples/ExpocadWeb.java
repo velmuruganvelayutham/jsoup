@@ -21,8 +21,8 @@ public class ExpocadWeb {
 		String previousCompanyName = "";
 		String previousBoothNumber = "";
 
-		String[] headers = { "Vendor name", "Booth No.", "Address", "Phone",
-				"Fax", "Website", "Product Category" };
+		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
+				"Address", "Phone", "Fax", "Website", "Product Category" };
 		for (String header : headers) {
 			writer.append(header);
 			writer.append(',');
@@ -33,9 +33,27 @@ public class ExpocadWeb {
 		final WebClient webClient = new WebClient();
 		webClient.getOptions().setUseInsecureSSL(true);
 		final HtmlPage page = webClient.getPage(showUrl);
+
+		String show = "";
+		List<?> showList = page.getByXPath("//*[@id=\"eventNameLabel\"]");
+		Iterator<?> showIterate = showList.iterator();
+		while (showIterate.hasNext()) {
+			HtmlElement next = (HtmlElement) showIterate.next();
+			show = next.asText();
+		}
+
+		String showDate = "";
+		List<?> showDateList = page.getByXPath("//*[@id=\"eventDatesLabel\"]");
+		Iterator<?> showDateIterate = showDateList.iterator();
+		while (showDateIterate.hasNext()) {
+			HtmlElement next = (HtmlElement) showDateIterate.next();
+			showDate = next.asText();
+		}
+
 		int n = 1;
 		while (n < 15) {
 			for (int i = 3; i < 23; i++) {
+
 				List<?> nextLinkList = null;
 				String companyValue = null;
 				String boothNumber = null;
@@ -82,11 +100,22 @@ public class ExpocadWeb {
 								if (previousCompanyName.equals(companyValue)
 										&& previousBoothNumber
 												.equals(boothNumber)) {
-									Thread.sleep(500);
+									Thread.sleep(1000);
 									m++;
 								} else {
+									// Show
+									writer.append(show);
+									writer.append(",");
+
+									// Show Date
+									writer.append(showDate);
+									writer.append(",");
+
+									// Comapny
 									writer.append(companyValue);
 									writer.append(",");
+
+									// booth Number
 									writer.append(boothNumber);
 									writer.append(",");
 									System.out.println("Count Companies::" + i);
@@ -184,7 +213,6 @@ public class ExpocadWeb {
 					}
 
 					// Product Category
-					String productCategoryName = null;
 					List<?> productCategoryList = page
 							.getByXPath("//*[@id=\"indexTabContainer_DbTab_vbnoframe1_div1\"]/table/tbody/tr/td/table[2]/tbody/tr[2]/td/table/tbody/tr/td");
 					Iterator<?> productCategoryDetail = productCategoryList
@@ -193,15 +221,10 @@ public class ExpocadWeb {
 						HtmlElement productCategory = (HtmlElement) productCategoryDetail
 								.next();
 
-						String productCategoryDetails = "";
+						String productCategoryDetails = "\"";
 						String productCategories = StringUtils.remove(
 								productCategory.asText(), "\r");
-						String[] split = productCategories.split("\n");
-						for (int k = 0; k < split.length; k++) {
-							productCategoryName = StringUtils.replace(split[k],
-									",", "");
-							productCategoryDetails += productCategoryName;
-						}
+						productCategoryDetails += productCategories + "\"";
 						writer.append(productCategoryDetails);
 					}
 
