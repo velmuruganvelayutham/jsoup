@@ -14,7 +14,10 @@ import com.itextpdf.text.pdf.RandomAccessFileOrArray;
 import com.itextpdf.text.pdf.parser.ContentByteUtils;
 import com.itextpdf.text.pdf.parser.MultiFilteredRenderListener;
 import com.itextpdf.text.pdf.parser.PdfContentStreamProcessor;
+import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.RenderListener;
+import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 
 public class PdfToExcel {
 
@@ -42,8 +45,25 @@ public class PdfToExcel {
 		PrintWriter out = new PrintWriter(new FileOutputStream(dest));
 		while (tokenizer.nextToken()) {
 			if (tokenizer.getTokenType() == PRTokeniser.TokenType.STRING) {
-				out.println(tokenizer.getStringValue());
+				String stringValue = tokenizer.getStringValue();
+				System.out.println(stringValue);
+				out.print(stringValue);
 			}
+		}
+		out.flush();
+		out.close();
+		reader.close();
+	}
+
+	public void parsePdf1(String pdf, String txt) throws IOException {
+		PdfReader reader = new PdfReader(pdf);
+		PdfReaderContentParser parser = new PdfReaderContentParser(reader);
+		PrintWriter out = new PrintWriter(new FileOutputStream(txt));
+		TextExtractionStrategy strategy;
+		for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+			strategy = parser.processContent(i,
+					new SimpleTextExtractionStrategy());
+			out.print(strategy.getResultantText());
 		}
 		out.flush();
 		out.close();
@@ -88,7 +108,8 @@ public class PdfToExcel {
 		PdfToExcel example = new PdfToExcel();
 		// HelloWorld.main(args);
 		// example.createPdf(PDF);
-		example.parsePdf(PdfToExcel.PDF, TEXT1);
+		example.parsePdf1(PdfToExcel.PDF, TEXT1);
+		// example.extractText(PdfToExcel.PDF, TEXT1);
 		// example.parsePdf(PDF, TEXT2);
 		// example.extractText(PDF, TEXT3);
 	}
