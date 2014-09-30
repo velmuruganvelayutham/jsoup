@@ -1,5 +1,6 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,8 +14,8 @@ import javax.json.JsonString;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.tocgroup.Jsoup;
 import org.tocgroup.Connection.Response;
+import org.tocgroup.Jsoup;
 
 import com.tocgroup.nodes.Document;
 import com.tocgroup.nodes.Element;
@@ -28,17 +29,24 @@ public class FallToy14 implements scraber {
 	}
 
 	/**
+	 * @return
 	 * 
 	 */
-	public void extract() {
+	public File extract() {
 		FileWriter writer = null;
+		File createTempFile = null;
 		try {
-			// int count = 0;
+			int count = 0;
 			long startTime = System.currentTimeMillis();
 			String[] schemes = { "http", "https" };
 			UrlValidator urlValidator = new UrlValidator(schemes);
-			writer = new FileWriter("/home/velmuruganv/Desktop/falltoy14.csv");
-			String[] headers = { "Show", "Show Date", "Vendor name", "Address",
+			createTempFile = File.createTempFile("list", ".csv");
+
+			// writer = new
+			// FileWriter("/home/velmuruganv/Desktop/falltoy14.csv");
+			writer = new FileWriter(createTempFile);
+
+			String[] headers = { "Show", "Show Date", "Vendor Name", "Address",
 					"Phone", "Fax", "Website", "Booth No", "Category" };
 			for (String header : headers) {
 				writer.append(header);
@@ -58,8 +66,8 @@ public class FallToy14 implements scraber {
 			Document showDoc = Jsoup.parse(jsonObject.toString());
 			Elements links = showDoc.select("a[href*=exhibitor]");
 			for (Element link : links) {
-				// if (++count == 5)
-				// break;
+				if (++count == 5)
+					break;
 				writer.append("FallToy14");
 				writer.append(',');
 				writer.append("Oct-7-9:2014 Dallas Market Center");
@@ -164,5 +172,6 @@ public class FallToy14 implements scraber {
 			e.printStackTrace();
 		} finally {
 		}
+		return createTempFile;
 	}
 }

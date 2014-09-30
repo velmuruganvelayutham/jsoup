@@ -1,7 +1,9 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
+
 public interface scraber {
 
-	public void extract();
+	public File extract();
 
 }
