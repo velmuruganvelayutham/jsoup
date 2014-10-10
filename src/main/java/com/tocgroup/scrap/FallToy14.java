@@ -22,7 +22,7 @@ import com.tocgroup.nodes.Element;
 import com.tocgroup.nodes.Node;
 import com.tocgroup.select.Elements;
 
-public class FallToy14 implements scraber {
+public class FallToy14 implements Scraper {
 
 	public static void main(String[] args) {
 		new FallToy14().extract();
@@ -40,7 +40,8 @@ public class FallToy14 implements scraber {
 			long startTime = System.currentTimeMillis();
 			String[] schemes = { "http", "https" };
 			UrlValidator urlValidator = new UrlValidator(schemes);
-			createTempFile = File.createTempFile("list", ".csv");
+			createTempFile = File.createTempFile(FallToy14.class.getName(),
+					".csv");
 
 			// writer = new
 			// FileWriter("/home/velmuruganv/Desktop/falltoy14.csv");

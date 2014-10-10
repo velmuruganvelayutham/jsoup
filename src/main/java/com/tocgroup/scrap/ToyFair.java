@@ -1,5 +1,6 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
@@ -15,15 +16,26 @@ import com.tocgroup.nodes.Document;
 import com.tocgroup.nodes.Element;
 import com.tocgroup.select.Elements;
 
-public class ToyFair {
+public class ToyFair implements Scraper {
 
 	static int l = 1;
 	static String previousVendor = "";
 
-	public static void main(String[] args) throws IOException,
+	public static void main(String[] args) throws Exception,
 			InterruptedException {
+		new ToyFair().extract();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.tocgroup.scrap.scraber#extract()
+	 */
+	public File extract() throws Exception {
 		long startTime = System.currentTimeMillis();
-		FileWriter writer = new FileWriter("/TOC/supplier_tradeshowNew.csv");
+		// FileWriter writer = new FileWriter("/TOC/supplier_tradeshowNew.csv");
+		File file = File.createTempFile(ToyFair.class.getName(), "csv");
+		FileWriter writer = new FileWriter(file);
 		String[] headers = { "Show", "Show Dates", "Vendor name", "Booth No",
 				"Address", "Phone", "Website", "Email", "Description",
 				"Categories" };
@@ -82,6 +94,7 @@ public class ToyFair {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total time taken to prepare csv "
 				+ (endTime - startTime) / 1000 + " Seconds ");
+		return file;
 	}
 
 	private static void generateCSV(FileWriter writer, final HtmlPage page,

@@ -1,5 +1,6 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -13,10 +14,20 @@ import com.tocgroup.select.Elements;
 /**
  * Example program to list links from a URL.
  */
-public class Expotec {
+public class Expotec implements Scraper {
 	public static void main(String[] args) throws IOException {
+		new Expotec().extract();
+	}
+
+	/**
+	 * @return
+	 * @throws IOException
+	 */
+	public File extract() throws IOException {
 		long startTime = System.currentTimeMillis();
-		FileWriter writer = new FileWriter("/TOC/supplier_tradeshow.csv");
+		File file = File.createTempFile(Expotec.class.getName(), "csv");
+		FileWriter writer = new FileWriter(file);
+		// FileWriter writer = new FileWriter("/TOC/supplier_tradeshow.csv");
 		String[] headers = { "Show", "Show Dates", "Vendor name", "Booth No",
 				"Address", "Phone", "Website", "Email", "Description" };
 		String exhibitorUrl = "http://events.expotec.us/sgs/exhibitors";
@@ -131,6 +142,7 @@ public class Expotec {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total time taken to prepare csv "
 				+ (endTime - startTime) / 1000 + " Seconds ");
+		return file;
 	}
 
 	private static void print(String msg, Object... args) {

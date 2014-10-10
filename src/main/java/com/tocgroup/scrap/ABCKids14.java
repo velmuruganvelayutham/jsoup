@@ -1,5 +1,6 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,15 +18,29 @@ import com.gargoylesoftware.htmlunit.html.HtmlHeading4;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-public class ABCKids14 {
+public class ABCKids14 implements Scraper {
 
 	public static void main(String[] args)
 			throws FailingHttpStatusCodeException, MalformedURLException,
 			IOException {
 
+		File extract = new ABCKids14().extract();
+		System.out.println(extract.getAbsolutePath());
+	}
+
+	/**
+	 * @return
+	 * @throws IOException
+	 * @throws FailingHttpStatusCodeException
+	 * @throws MalformedURLException
+	 */
+	public File extract() throws IOException, FailingHttpStatusCodeException,
+			MalformedURLException {
 		long startTime = System.currentTimeMillis();
-		FileWriter writer = new FileWriter(
-				"/home/velmuruganv/Downloads/abckids.csv");
+		File file = File.createTempFile(ABCKids14.class.getName(), "csv");
+		FileWriter writer = new FileWriter(file);
+		// FileWriter writer = new FileWriter(
+		// "/home/velmuruganv/Downloads/abckids.csv");
 		String[] headers = { "Show", "Show Dates", "Vendor name", "Booth No",
 				"Address", "Phone", "Website", "Email", "Description",
 				"Categories" };
@@ -133,5 +148,6 @@ public class ABCKids14 {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total time taken to prepare csv "
 				+ (endTime - startTime) / 1000 + " Seconds ");
+		return file;
 	}
 }

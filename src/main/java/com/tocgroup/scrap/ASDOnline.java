@@ -1,13 +1,16 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tocgroup.Jsoup;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -15,12 +18,26 @@ import com.tocgroup.nodes.Document;
 import com.tocgroup.nodes.Element;
 import com.tocgroup.select.Elements;
 
-public class ASDOnline {
+public class ASDOnline implements Scraper {
 
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
+		new ASDOnline().extract();
+	}
+
+	/**
+	 * @return
+	 * @throws IOException
+	 * @throws FailingHttpStatusCodeException
+	 * @throws MalformedURLException
+	 * @throws InterruptedException
+	 */
+	public File extract() throws IOException, FailingHttpStatusCodeException,
+			MalformedURLException, InterruptedException {
 		long startTime = System.currentTimeMillis();
-		FileWriter writer = new FileWriter("/TOC/supplier_ASDOnline.csv");
+		File file = File.createTempFile(ASDOnline.class.getName(), "csv");
+		FileWriter writer = new FileWriter(file);
+		// FileWriter writer = new FileWriter("/TOC/supplier_ASDOnline.csv");
 		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
 				"Website", "Address", "Phone", "Email", "Product Categories" };
 		for (String header : headers) {
@@ -177,5 +194,6 @@ public class ASDOnline {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total time taken to prepare csv "
 				+ (endTime - startTime) / 1000 + " Seconds ");
+		return file;
 	}
 }

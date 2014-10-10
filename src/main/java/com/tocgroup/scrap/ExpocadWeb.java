@@ -1,23 +1,40 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-public class ExpocadWeb {
+public class ExpocadWeb implements Scraper {
 
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
+		new ExpocadWeb().extract();
+	}
+
+	/**
+	 * @return
+	 * @throws IOException
+	 * @throws FailingHttpStatusCodeException
+	 * @throws MalformedURLException
+	 * @throws InterruptedException
+	 */
+	public File extract() throws IOException, FailingHttpStatusCodeException,
+			MalformedURLException, InterruptedException {
 		long startTime = System.currentTimeMillis();
-		FileWriter writer = new FileWriter("/TOC/supplier_web.csv");
+		File file = File.createTempFile(ExpocadWeb.class.getName(), "csv");
+		FileWriter writer = new FileWriter(file);
+		// FileWriter writer = new FileWriter("/TOC/supplier_web.csv");
 		String previousCompanyName = "";
 		String previousBoothNumber = "";
 
@@ -255,5 +272,6 @@ public class ExpocadWeb {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total time taken to prepare csv "
 				+ (endTime - startTime) / 1000 + " Seconds ");
+		return file;
 	}
 }

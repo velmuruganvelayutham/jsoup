@@ -1,23 +1,35 @@
 package com.tocgroup.scrap;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.tocgroup.Connection;
-import org.tocgroup.Jsoup;
 import org.tocgroup.Connection.Method;
+import org.tocgroup.Jsoup;
 
 import com.tocgroup.nodes.Document;
 import com.tocgroup.nodes.Element;
 import com.tocgroup.select.Elements;
 
-public class FurnitureGiftMarket {
+public class FurnitureGiftMarket implements Scraper {
 
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
+		new FurnitureGiftMarket().extract();
+	}
+
+	/**
+	 * @return
+	 * @throws IOException
+	 */
+	public File extract() throws IOException {
 		long startTime = System.currentTimeMillis();
-		FileWriter writer = new FileWriter("/TOC/FurnitureGiftMarket.csv");
+		File file = File.createTempFile(FurnitureGiftMarket.class.getName(),
+				"csv");
+		FileWriter writer = new FileWriter(file);
+		// FileWriter writer = new FileWriter("/TOC/FurnitureGiftMarket.csv");
 
 		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
 				"Website", "Description", "Address", "City", "State",
@@ -244,5 +256,6 @@ public class FurnitureGiftMarket {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total time taken to prepare csv "
 				+ (endTime - startTime) / 1000 + " Seconds ");
+		return file;
 	}
 }
