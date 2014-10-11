@@ -38,7 +38,7 @@ public class ASDOnline implements Scraper {
 		File file = File.createTempFile(ASDOnline.class.getName(), "csv");
 		FileWriter writer = new FileWriter(file);
 		// FileWriter writer = new FileWriter("/TOC/supplier_ASDOnline.csv");
-		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
 				"Website", "Address", "Phone", "Email", "Product Categories" };
 		for (String header : headers) {
 			writer.append(header);

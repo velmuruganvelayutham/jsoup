@@ -28,7 +28,7 @@ public class Expotec implements Scraper {
 		File file = File.createTempFile(Expotec.class.getName(), "csv");
 		FileWriter writer = new FileWriter(file);
 		// FileWriter writer = new FileWriter("/TOC/supplier_tradeshow.csv");
-		String[] headers = { "Show", "Show Dates", "Vendor name", "Booth No",
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
 				"Address", "Phone", "Website", "Email", "Description" };
 		String exhibitorUrl = "http://events.expotec.us/sgs/exhibitors";
 		String showUrl = "http://events.expotec.us/sgs/#show";

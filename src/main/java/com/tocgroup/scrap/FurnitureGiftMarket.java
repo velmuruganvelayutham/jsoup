@@ -31,9 +31,9 @@ public class FurnitureGiftMarket implements Scraper {
 		FileWriter writer = new FileWriter(file);
 		// FileWriter writer = new FileWriter("/TOC/FurnitureGiftMarket.csv");
 
-		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
 				"Website", "Description", "Address", "City", "State",
-				"Country", "Postal Code", "Phone", "Categories" };
+				"Country", "Postal Code", "Phone", "Product Categories" };
 		for (String header : headers) {
 			writer.append(header);
 			writer.append(',');

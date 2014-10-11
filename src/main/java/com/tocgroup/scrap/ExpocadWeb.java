@@ -38,8 +38,8 @@ public class ExpocadWeb implements Scraper {
 		String previousCompanyName = "";
 		String previousBoothNumber = "";
 
-		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
-				"Address", "Phone", "Fax", "Website", "Product Category" };
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
+				"Address", "Phone", "Fax", "Website", "Product Categories" };
 		for (String header : headers) {
 			writer.append(header);
 			writer.append(',');

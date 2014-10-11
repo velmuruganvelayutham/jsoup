@@ -36,9 +36,9 @@ public class ToyFair implements Scraper {
 		// FileWriter writer = new FileWriter("/TOC/supplier_tradeshowNew.csv");
 		File file = File.createTempFile(ToyFair.class.getName(), "csv");
 		FileWriter writer = new FileWriter(file);
-		String[] headers = { "Show", "Show Dates", "Vendor name", "Booth No",
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
 				"Address", "Phone", "Website", "Email", "Description",
-				"Categories" };
+				"Product Categories" };
 		for (String header : headers) {
 			writer.append(header);
 			writer.append(',');

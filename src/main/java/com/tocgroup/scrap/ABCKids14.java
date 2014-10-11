@@ -41,9 +41,9 @@ public class ABCKids14 implements Scraper {
 		FileWriter writer = new FileWriter(file);
 		// FileWriter writer = new FileWriter(
 		// "/home/velmuruganv/Downloads/abckids.csv");
-		String[] headers = { "Show", "Show Dates", "Vendor name", "Booth No",
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
 				"Address", "Phone", "Website", "Email", "Description",
-				"Categories" };
+				"Product Categories" };
 		for (String header : headers) {
 			writer.append(header);
 			writer.append(',');

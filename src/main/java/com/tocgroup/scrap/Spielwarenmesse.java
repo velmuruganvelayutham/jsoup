@@ -36,7 +36,7 @@ public class Spielwarenmesse implements Scraper {
 		FileWriter writer = new FileWriter(file);
 		// FileWriter writer = new FileWriter("/TOC/Spielwarenmesse.csv");
 
-		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
 				"Address", "Website", "Phone", "Fax", "Email" };
 		for (String header : headers) {
 			writer.append(header);

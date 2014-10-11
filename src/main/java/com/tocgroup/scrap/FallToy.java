@@ -24,8 +24,8 @@ public class FallToy implements Scraper {
 		File file = File.createTempFile(FallToy.class.getName(), "csv");
 		// FileWriter writer = new FileWriter("/TOC/FallToy.csv");
 		FileWriter writer = new FileWriter(file);
-		String[] headers = { "Show", "Show Date", "Vendor name", "Website",
-				"Location" };
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Website",
+				"Address" };
 		for (String header : headers) {
 			writer.append(header);
 			writer.append(',');

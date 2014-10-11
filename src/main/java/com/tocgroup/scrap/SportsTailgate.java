@@ -39,7 +39,7 @@ public class SportsTailgate implements Scraper {
 		FileWriter writer = new FileWriter(file);
 		// FileWriter writer = new
 		// FileWriter("/TOC/supplier_SportsTailgate.csv");
-		String[] headers = { "Show", "Show Date", "Vendor name", "Booth No.",
+		String[] headers = { "Show", "Show Date", "Vendor Name", "Booth No",
 				"Website", "Address", "Email", "Phone" };
 		for (String header : headers) {
 			writer.append(header);
