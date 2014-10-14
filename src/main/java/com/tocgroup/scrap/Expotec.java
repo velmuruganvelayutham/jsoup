@@ -24,6 +24,7 @@ public class Expotec implements Scraper {
 	 * @throws IOException
 	 */
 	public File extract() throws IOException {
+
 		long startTime = System.currentTimeMillis();
 		File file = File.createTempFile(Expotec.class.getName(), "csv");
 		FileWriter writer = new FileWriter(file);
